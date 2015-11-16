@@ -12,11 +12,27 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
     */
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
     if(isset($_GET['page_id']))
         {
-            $page_id=$_GET['page_id'];
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $page_id=$_GET['page_id']; 
+                } 
+            else          
+                header("location:/root5/admin/template/index.php");       
+        }
+    if(isset($_GET['msg']))
+        {
+            $message=$_GET['msg'];
+?>
+                                
+                    <div class="alert alert-warning alert-dismissible text-center" role="alert">
+<?php               
+                    echo $message;
+?>                  </div>
+<?php
         }
     if(isset($_POST["current_status"])) 
         {
@@ -29,28 +45,17 @@
             $servicer_detail=$_POST["servicer_detail"];
             $servicer_contact=$_POST["servicer_contact"];
             $servicer_priority=$_POST["servicer_priority"];
-            $servicer_status=$_POST["current_status"];
-/**
-    * get the Update from database
-    *
-    * @param  variables  $servicer_id hotel_id
-    * @param  variables  $servicer_name Servicer name
-    * @param  variables  $servicer_email Servicer Email address
-    * @param  variables  $servicer_checkin Servicer Check in date
-    * @param  variables  $servicer_checkout Servicer Check out date  
-    * @param  variables  $servicer_requestdate Servicer Request date
-    * @param  variables  $servicer_detail Details of Servicer
-    * @param  variables  $servicer_contact Servicer Contact Number
-    * @param  variables  $servicer_priority Servicer Priority
-    * @param  variables  $servicer_status Servicer Status
-    * @return true or false
-*/  
+            $servicer_status=$_POST["current_status"];  
             $update1=update($page_id,$servicer_name,$servicer_email,$servicer_checkin,$servicer_checkout,$servicer_requestdate,$servicer_detail,$servicer_contact,$servicer_priority,$servicer_status,$servicer_id);
             if($update1)
                 {
-                    header("location:hotel1_service.php?page_id=1"); 
+                    header("location:hotel1_service.php?page_id=1 && msg=Status Updated Sucessfully "); 
                 } 
         }
+            foreach ($errors as $value)
+                {
+                    echo $value;
+                }    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -113,13 +118,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
 <?php
-/**
-    * get the all data from database about servicer
-    *
-    * @param  variables  $page_id hotel_id
-    * @return all data from database
-*/ 
-    $data=get_all_servicing($page_id);  
+    $data=get_all_servicing_order($page_id);  
     foreach ($data as $value) 
         {             
 ?>

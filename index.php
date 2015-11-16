@@ -41,7 +41,7 @@
 </head>
 <body>
 <?php  
-   require '/pages/core/inti.php';
+   require '/pages/core/init.php';
 	if(empty($_POST)===false)
 	   {
             if(empty($_POST['form-username'])===true||($_POST['form-password']===true))
@@ -54,14 +54,7 @@
             else
                 {
                     $username=$_POST['form-username'];
-                    $password=$_POST['form-password'];
-/**
-    * get the passwordand username data from databae
-    *
-    * @param  variables  $username   admin username
-    * @param  variables  $password   admin password
-    * @return true or false
-*/   
+                    $password=md5($_POST['form-password']); 
                     $login=login($username,$password);
                     if($login)
                         {

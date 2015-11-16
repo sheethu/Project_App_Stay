@@ -2,7 +2,7 @@
 /**
     * Admin Events Page for App Stay
     *
-    * Details about the Add and edit new events in this page by the admin
+    * Details about the booking services and their specials
     *
     * LICENSE: Root5 
     *
@@ -12,60 +12,71 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
 */
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
     if(isset($_GET['page_id']))
         {
-            $page_id=$_GET['page_id'];       
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $page_id=$_GET['page_id']; 
+                } 
+            else          
+                header("location:/root5/admin/template/index.php");       
         }
     if(isset($_GET['msg']))
         {
-            echo $_GET['msg'];
+           $message=$_GET['msg'];
+?>                                
+                    <div class="alert alert-warning alert-dismissible text-center" role="alert">
+<?php               
+                        echo $message;
+?>                  
+                    </div>
+<?php
         }
-    if (isset($_POST["events"])&&isset($_POST["description"])) 
+    if(empty($_POST)===false)
         {
-            $event_title=$_POST["events"];
-            $description=$_POST["description"];
-            $filetmp=$_FILES["images"]["tmp_name"];
-              $filename=$_FILES["images"]["name"];
-            $filetype=$_FILES["images"]["type"];
-            $filepath= "photo2/".$filename;
-            move_uploaded_file( $filetmp,$filepath);
-            $data=array($page_id,$event_title,$description,$filepath);
-/**
-    * Insert the data into the database
-    *
-    * @param  variables  $page_id hotel_id
-    * @param  variables  $event_title About the event title
-    * @param  variables  $event_description descripes about the event
-    * @param  variables  $filepath uploading images related with events
-    * @return true or false
-*/
-            $add=add_data_event($data);
-            foreach ($errors as $value)
+            if(empty($_POST['events'])===true||empty($_POST['description'])===true||empty($_FILES['images']['name']))
                 {
-                    echo $value;
-                }
-        }                  
+?>                    
+                    <div class="alert alert-warning alert-dismissible text-center" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>Add some events and descriptions
+                    </div>
+ <?php       
+                }  
+            else
+                if (isset($_POST["events"])&&isset($_POST["description"])) 
+                    {
+                        $event_title=$_POST["events"];
+                        $description=$_POST["description"];
+                        $filetmp=$_FILES["images"]["tmp_name"];
+                        $filename=$_FILES["images"]["name"];
+                        $filetype=$_FILES["images"]["type"];
+                        $filepath= "photo2/".$filename;
+                        move_uploaded_file( $filetmp,$filepath);
+                        $data=array($page_id,$event_title,$description,$filepath);
+                        $add=add_data_event($data);
+                        if($add)
+                            {          
+                                header('location:hotel2_galery_event.php?page_id=2 && msg=Add Offers Successfully'); 
+                            }
+                        foreach ($errors as $value)
+                            {
+                                echo $value;
+                            }
+                    }
+        }   
+        if(isset($_GET['file']))
+        {
+             unlink($_GET['file']);
+        }          
     if(isset($_GET['id']))
         {
             $id=$_GET['id'];
-/**
-    * Delete the event from database
-    *
-    * @param  variables  $id event_id
-    * @return true or false
-*/ 
             delete_event1($id);
-            unlink("photo2/".$filename);
-            header('location:hotel2_galery_event.php?page_id=2');
+           
+            header('location:hotel2_galery_event.php?page_id=2 && msg=Delete Successfully');
         }
-/**
-    * get the all data from database about events
-    *
-    * @param  variables  $page_id hotel_id
-    * @return all data from database
-*/ 
     $data1=get_all_event($page_id);
 ?>
 <!DOCTYPE html>
@@ -78,7 +89,6 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="ico/favicon1.png">
     <title>Hotel2 Name</title>
-    <link rel="shortcut icon" href="ico/favicon.png">
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- MetisMenu CSS -->
@@ -106,7 +116,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
                 <!-- Header -->
-	            <header id="head">
+              <header id="head">
                     <div class="container">
                         <div class="row">
                             <form action="hotel2_galery_event.php?page_id=2" method="post" class="col-sm-4" enctype="multipart/form-data">
@@ -129,11 +139,11 @@
                         </div>   
                     </div>  
                 </header>
-	            <div>	
+              <div> 
                     <h2 class="text-center"> OUR NEW EVENTS.......</h2>
                 </div>
-	            <div>
-	                <table class="table table-striped table-bordered table-hover text-center">
+              <div>
+                  <table class="table table-striped table-bordered table-hover text-center">
                         <tr class="bg-default">
                             <th>EVENT TITLE</th> 
                             <th>EVENT DESCRIPTION</th> 
@@ -165,12 +175,12 @@
 ?>
                             </td>
                             <td>   
-                            <a href="hotel2_galery_event.php?page_id=2&&id=<?php echo $val['event_id'];  ?>" >
+                            <a href="hotel2_galery_event.php?page_id=2&&id=<?php echo $val['event_id'];  ?> && msg=Delete Successfully  && file=<?php echo $val['image_path'] ?>">
                             <button type="submit" class="btn btn-primary">
                             <span> DELETE</span>
                             </button>
                             </a>&nbsp
-                            <a href="hotel2_galery_eventedit.php?page_id=2&&id=<?php echo $val['event_id'];  ?>" >
+                            <a href="hotel2_galery_eventedit.php?page_id=2&&id=<?php echo $val['event_id']; ?> && msg=Edit Successfully" >
                             <button type="submit" class="btn btn-primary">
                             <span> EDIT</span>
                             </button>
@@ -181,7 +191,7 @@
 ?>
                         </tr> 
                     </table>
-  			    </div>
+            </div>
             </div>
             <!-- /.row -->
             <div class="row">  
@@ -192,6 +202,24 @@
     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
+    <script type="text/javascript">
+    function deleteImage(file_name)
+{
+    var r = confirm("Are you sure you want to delete this Image?")
+    if(r == true)
+    {
+        $.ajax({
+          url: 'hotel2_galery_event.php',
+          data: {'file' : "<?php echo dirname(__FILE__) . '/photo2/'?>" + file_name },
+          success: function (response) {
+             // do something
+          },
+          error: function () {
+             // do something
+          }
+        });
+    }
+}</script>
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

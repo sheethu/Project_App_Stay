@@ -12,60 +12,65 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
 */
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
     if(isset($_GET['page_id']))
         {
-            $page_id=$_GET['page_id'];
-/**
-    * get the all data from database about offers
-    *
-    * @param  variables  $page_id hotel_id
-    * @return all data from database
-*/ 
-            $data1=get_all_emp($page_id);     
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $page_id=$_GET['page_id']; 
+                    $data1=get_all_emp($page_id);   
+                } 
+            else          
+                header("location:/root5/admin/template/index.php"); 
         }
+
     if(isset($_GET['id']))
         {
             $id=$_GET['id'];
-/**
-    * Delete the offer from database
-    *
-    * @param  variables  $id offer_id
-    * @return true or false
-*/ 
             delete($id);
         } 
     if(isset($_GET['msg']))
         {
-            echo $_GET['msg'];
+            $message=$_GET['msg'];
+?>                                
+                <div class="alert alert-warning alert-dismissible text-center" role="alert">
+<?php               
+                    echo $message;
+?>                  
+                </div>
+<?php
         }  
     if(empty($_POST)===false)
         {
-            if(empty($_POST['offered'])===true||empty($_POST['description']))
+            if(empty($_POST['offered'])||empty(trim($_POST['description'])))
                 {
 ?>                    
-                    <div class="alert alert-warning alert-dismissible text-center" role="alert">Add some offers and descriptions</div>
+                    <div class="alert alert-warning alert-dismissible text-center" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>Add some offers and descriptions
+                    </div>
  <?php                  
                 }
             else
                 {
-                    $data=array($page_id,$_POST['offered'],$_POST['description']);
-/**
-    * Insert the data into the database
-    *
-    * @param  variables  $page_id hotel_id
-    * @param  variables  $_POST['offered'] About the offer title
-    * @param  variables  $_POST['description'] descripes about the offer
-    * @return true or false
-*/
-                    $add=add_data($data);
-                    header('location:hotel1_galery.php?page_id=1');                
+                    $title=$_POST['offered'];
+                    $offer=$_POST['description'];
+                    $data=array($page_id,$title,$offer);
+                   
+                    if($data)
+                        {   
+                            $add=add_data($data); 
+                            header('location:hotel1_galery.php?page_id=1 && msg=Add Offers Successfully'); 
+                        }
+                    else if(empty($_POST['offered']) || empty($_POST['description']))
+                        {
+?>                           
+                            <div class="alert alert-danger alert-dismissible text-center" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><?php echo "Add offers and descriptions "; ?></div>
+<?php
+                        }               
                 }
-                foreach ($errors as $value)
-                    {
-                        echo $value;
-                    }
+
         } 
 ?>
 <!DOCTYPE html>
@@ -108,14 +113,15 @@
                 <header id="head">
                     <div class="container">
                         <div class="row">
-                            <form action="hotel1_galery.php?page_id=1" method="post" class="col-sm-4">
+                            <form action="hotel1_galery.php?page_id=1" method="post" class="col-sm-4" role="form">
                             <div class="form-group has-info">
+                                <input type="hidden" name="id" value="<?php echo $val->offer_id;?>">
                                 <label class="control-label" for="inputSuccess">Offer title
                                 </label>
                                 <input type="text" class="form-control" name="offered" id="offered">
-                                <label>Offer Description
+                                <label class="control-label" for="inputSuccess">Offer Description
                                 </label>
-                                <textarea id="description" name="description" placeholder="Offer Description" class="form-control " rows="3">
+                                <textarea id="description" name="description"  class="form-control " rows="3" required="offer description is required">
                                 </textarea>
                                 <br>  
                                 <button type="submit" class="btn btn-primary">
@@ -156,13 +162,13 @@
  ?>
                             </td>
                             <td>
-                                <a href="hotel1_galery.php?page_id=1&&id=<?php echo $val['offer_id']?>" >
+                                <a href="hotel1_galery.php?page_id=1&&id=<?php echo $val['offer_id'];?> && msg=Delete successfully" >
                                 <button type="submit" class="btn btn-primary">
                                 <span> DELETE
                                 </span>
                                 </button>
                                 </a>&nbsp
-                                <a href="hotel1_galery_edit.php?page_id=1&&id=<?php echo $val['offer_id'];  ?>" >
+                                <a href="hotel1_galery_edit.php?page_id=1&&id=<?php echo $val['offer_id'];?> &&  msg=Edit successfully" >
                                 <button type="submit" class="btn btn-primary">
                                 <span> EDIT
                                 </span>

@@ -12,11 +12,16 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
 */
-require 'core/inti.php';
+require 'core/init.php';
 is_logged_in();
 if(isset($_GET['page_id']))
         {
-            $page_id=$_GET['page_id'];
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $page_id=$_GET['page_id']; 
+                } 
+            else          
+                header("location:/root5/admin/template/index.php");       
         }
 ?>
 <!DOCTYPE html>
@@ -80,13 +85,7 @@ if(isset($_GET['page_id']))
                         <div class="panel panel-default">
                             <div class="panel-heading">
 <?php
-/**
-    * get the all data from database about booking
-    *
-    * @param  variables  $page_id hotel_id
-    * @return all data from database
-*/ 
-                            $data=get_all_booking($page_id);  
+                            $data=get_all_booking_order($page_id);  
         foreach ($data as $value) 
             {             
 ?>

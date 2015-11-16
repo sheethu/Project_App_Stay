@@ -12,23 +12,21 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
 */
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
     if(isset($_GET['id']))
         {
             $id=$_GET['id'];
-        } 
-
+        }
     if(isset($_GET['page_id']))
-        {
-            $page_id=$_GET['page_id'];
-/**
-    * get the all data from database about events
-    *
-    * @param  variables  $page_id hotel_id
-    * @return all data from database
-*/ 
-            $data1=get_all_event($page_id);            
+        {        
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $page_id=$_GET['page_id']; 
+                    $data1=get_all_event_order($page_id); 
+                } 
+            else          
+                header("location:/root5/admin/template/index.php");       
         }
 ?>
 <!DOCTYPE html>
@@ -63,7 +61,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Our events....</h1>
+                    <h1 class="page-header">Our Hotel 1 events....</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

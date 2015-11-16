@@ -12,7 +12,7 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
     */ 
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
 ?>
 <!DOCTYPE html>

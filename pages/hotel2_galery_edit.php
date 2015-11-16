@@ -12,43 +12,30 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
 */
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
     if(isset($_GET['page_id']))
         {
-            $id=$_GET['page_id'];
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $id=$_GET['page_id'];
+                } 
+            else          
+                header("location:/root5/admin/template/index.php"); 
         }
     $id=(isset($_GET['id']))?$_GET['id']:'';
-/**
-    * get the all data from database about offers
-    *
-    * @param  variables  $id hotel_id
-    * @return all data from database
-*/
     $val=view_data1($id);
     if(empty($_POST)===false)
         {
             $title=$_POST["offered"];
             $description=trim($_POST["description"]);
             $id=$_POST["id"];
-/**
-    * get the Update from database
-    *
-    * @param  variables  $title About the offer title
-    * @param  variables  $description description about the offer
-    * @param  variables  $id event id
-    * @return true or false
-*/
             $update1=update1($title,$description,$id);
             if($update1)
                 {
-                    header('location:hotel2_galery.php?page_id=2');
+                    header('location:hotel2_galery.php?page_id=2 && msg=Edited Sucessfully');
                 }
         }
-        if(isset($_GET['msg']))
-            {
-                echo $_GET['msg'];
-            }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +81,7 @@
                         <input type="text" class="form-control" name="offered" id="offered" value="<?php echo $val->offers_name; ?>">
                         <label>Offer Description
                         </label>
-                        <textarea name="description" class="form-control text-left" rows="3"><?php echo $val->offers_description;?></textarea><br>  
+                        <textarea name="description" class="form-control text-left" rows="3" required><?php echo $val->offers_description;?></textarea><br>  
                         <br>  
                         <button type="submit" class="btn btn-primary">
                         <span>UPDATE

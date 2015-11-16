@@ -125,7 +125,7 @@
                             <a href="hotel1_offers.php?page_id=1"><i class="fa fa-table fa-fw"></i>Hotel 1</a>        
                         </li>
                         <li>
-                            <a href="hotel1_offers.php?page_id=2"><i class="fa fa-table fa-fw"></i>Hotel 2</a>                            
+                            <a href="hotel2_offers.php?page_id=2"><i class="fa fa-table fa-fw"></i>Hotel 2</a>                            
                         </li>
                     </ul>
                 </li>
@@ -136,7 +136,7 @@
                             <a href="hotel1_events.php?page_id=1"><i class="fa fa-edit fa-fw"></i>Hotel 1</a>                                   
                         </li>
                         <li>
-                            <a href="hotel1_events.php?page_id=2"><i class="fa fa-edit fa-fw"></i>Hotel 2</a>  
+                            <a href="hotel2_events.php?page_id=2"><i class="fa fa-edit fa-fw"></i>Hotel 2</a>  
                         </li>
                     </ul>
                 </li>

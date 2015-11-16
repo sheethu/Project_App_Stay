@@ -61,7 +61,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Hotel 1 offers.....</h1>
+                    <h1 class="page-header">Hotel 2 offers.....</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -101,7 +101,8 @@
                                         </tr>
 <?php
         }
-?>                                                                                        
+?>                                                  
+                                        
                                     </tbody>
                                 </table>
                             </div>

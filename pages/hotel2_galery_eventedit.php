@@ -1,6 +1,6 @@
 <?php
 /**
-    *  Admin Edit Page for Events in App Stay
+    *  Admin Edit Page for App Stay
     *
     * Details to Edit the Events by this page
     *
@@ -12,16 +12,17 @@
     * @since      File available since Release 1.0.0
     * @author     sheethal
 */
-    require 'core/inti.php';
+    require 'core/init.php';
     is_logged_in();
     if(isset($_GET['page_id']))
         {
-            $page_id=$_GET['page_id'];
+            if($_GET['page_id']==1||$_GET['page_id']==2)
+                {
+                    $page_id=$_GET['page_id']; 
+                } 
+            else          
+                header("location:/root5/admin/template/index.php");       
         }
-        if(isset($_GET['msg']))
-            {
-                echo $_GET['msg'];
-            }
         $id=(isset($_GET['id']))?$_GET['id']:'';
         $val=view_data1_event($id);
         if (isset($_POST["events"]) && isset($_POST["description"])) 
@@ -41,20 +42,10 @@
                     {
                         $filepath=$_POST["old_image_path"];
                     }
-/**
-    * get the Update from database
-    *
-    * @param  variables  $page_id hotel_id
-    * @param  variables  $title About the event title
-    * @param  variables  $description description about the event
-    * @param  variables  $filepath uploading images related with events
-    * @param  variables  $id event id
-    * @return true or false
-*/
                 $update1=update_query($page_id,$title,$description,$filepath,$id);
                 if($update1)
                     {
-                       header("location:hotel2_galery_event.php?page_id=2");
+                       header("location:hotel2_galery_event.php?page_id=2&&msg=Edit Successfully");
                     }
             }    
             foreach ($errors as $value)
@@ -98,7 +89,7 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">Edit Hotel2 events</h1>
                     </div>
-                    <form action="hotel2_galery_eventedit.php?page_id=2" method="post" class="col-sm-4" enctype="multipart/form-data">
+                    <form action="hotel2_galery_eventedit.php?page_id=2&&msg=Update_sucessfully" method="post" class="col-sm-4" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<?php echo $val->event_id;?>">
                     <div class="form-group has-info">
                     <label class="control-label" for="inputSuccess">Event title</label>
